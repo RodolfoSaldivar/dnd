@@ -2,6 +2,8 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
+    commonjs: true,
   },
   settings: {
     react: {
@@ -25,5 +27,7 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["react"],
-  rules: {},
+  rules: {
+    "no-unused-vars": "warn",
+  },
 };
