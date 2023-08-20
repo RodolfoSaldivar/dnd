@@ -1,7 +1,12 @@
 import React from "react";
+import Header from "./Header";
 
-const Root = () => {
-  return <div>Hello</div>;
-};
-
-export default Root;
+export default function ButtonAppBar() {
+  return (
+    <div>
+      <Header />
+			<div className="mt-10" />
+			{process.env.REACT_APP_NOT_SECRET_CODE}
+    </div>
+  );
+}
