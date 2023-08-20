@@ -5,6 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { logOutFromFirebase } from "utils/firebase";
 import { useLoggedUserStore } from "stores/loggedUser";
 
 const ButtonAppBar = () => {
@@ -29,7 +30,9 @@ const ButtonAppBar = () => {
               News
             </Typography>
 
-            <Button color="inherit">Log Out</Button>
+            <Button color="inherit" onClick={logOutFromFirebase}>
+              Log Out
+            </Button>
           </>
         )}
       </Toolbar>

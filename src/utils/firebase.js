@@ -1,6 +1,12 @@
 import { initializeApp } from "firebase/app";
+import { useLoggedUserStore } from "stores/loggedUser";
 import { getDatabase, ref, onValue } from "firebase/database";
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  signOut,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
@@ -14,35 +20,34 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
 
-export const auth = getAuth(app);
-export const database = getDatabase(app);
+export const logOutFromFirebase = () => signOut(auth);
 
-signInWithEmailAndPassword(auth, "mail", "passwrd")
-  .then(userCredential => {
-    // Signed in
-    const user = userCredential.user;
-    console.log("%c31 - user: ", "background-color: yellow", user);
-    // ...
-  })
-  .catch(error => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.log(
-      "%c43 - errorMessage: ",
-      "background-color: yellow",
-      errorMessage,
-    );
+export const signIntoFirebase = async (email, password) => {
+  try {
+    const creds = await signInWithEmailAndPassword(auth, email, password);
+    const { uid, metadata } = creds.user;
+    return { id: uid, email, metadata };
+  } catch (error) {
+    return { error: error.code };
+  }
+};
+
+export const setLoggedUserIfExist = () => {
+  onAuthStateChanged(auth, async user => {
+    const { uid, email, metadata } = user || {};
+    const userData = { id: uid, email, metadata };
+    useLoggedUserStore.setState({
+      checkedIfLogged: true,
+      loggedUser: user ? userData : undefined,
+    });
   });
+};
 
-// signOut(auth).then(() => {
-//   // Sign-out successful.
-// }).catch((error) => {
-//   // An error happened.
-// });
-
-const starCountRef = ref(database, "campaign");
+const starCountRef = ref(database, "users");
 onValue(starCountRef, snapshot => {
   const data = snapshot.val();
-  console.log("%c21 - data: ", "background-color: yellow", data);
+  // console.log("%c21 - data: ", "background-color: yellow", data);
 });

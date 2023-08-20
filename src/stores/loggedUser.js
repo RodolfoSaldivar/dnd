@@ -1,11 +1,6 @@
 import { create } from "zustand";
 
-export const useLoggedUserStore = create(set => ({
+export const useLoggedUserStore = create(() => ({
   loggedUser: undefined,
-  actions: {
-    setLoggedUser: loggedUser => set(() => ({ loggedUser })),
-  },
+  checkedIfLogged: false,
 }));
-
-export const useLoggedUserStoreActions = () =>
-  useLoggedUserStore(state => state.actions);
