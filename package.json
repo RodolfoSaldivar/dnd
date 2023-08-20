@@ -20,7 +20,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -28,6 +29,9 @@
       "react-app/jest"
     ]
   },
+  "eslintIgnore": [
+    "tailwind.config.js"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -44,6 +48,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
     "prettier": "^3.0.2",
     "prettier-plugin-tailwindcss": "^0.5.3",
     "tailwindcss": "^3.3.3"
