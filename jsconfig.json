@@ -3,12 +3,7 @@
     "baseUrl": "./src",
     "checkJs": true,
     "jsx": "react",
-    "allowJs": true,
-    "paths": {
-      "@/components/*": ["components/*"],
-      "@/utils/*": ["utils/*"],
-      "@/stores/*": ["stores/*"]
-    }
+    "allowJs": true
   },
   "exclude": ["node_modules"]
 }

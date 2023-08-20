@@ -1,12 +1,16 @@
 import React from "react";
 import Header from "./Header";
+import Login from "components/Login";
+import { useLoggedUserStore } from "stores/loggedUser";
 
 export default function ButtonAppBar() {
+  const { loggedUser } = useLoggedUserStore();
+
   return (
     <div>
       <Header />
-			<div className="mt-10" />
-			{process.env.REACT_APP_NOT_SECRET_CODE}
+
+      {!loggedUser && <Login />}
     </div>
   );
 }
