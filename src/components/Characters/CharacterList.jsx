@@ -1,4 +1,5 @@
 import React from "react";
+import AddIcon from "@mui/icons-material/Add";
 import CharacterCard from "components/Characters/CharacterCard";
 
 const CharacterList = () => {
@@ -9,6 +10,13 @@ const CharacterList = () => {
       </div>
       <div className="flex justify-around">
         <CharacterCard />
+      </div>
+
+      <div className="flex justify-around">
+        <div className="flex min-h-[80px] w-[250px] animate-pulse cursor-pointer items-center justify-around rounded-md bg-gray-100 font-bold text-blue-400">
+          Crear Personaje
+          <AddIcon fontSize="large" />
+        </div>
       </div>
     </div>
   );
