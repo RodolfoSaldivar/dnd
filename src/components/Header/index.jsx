@@ -5,10 +5,12 @@ import Toolbar from "@mui/material/Toolbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import { useCommonStore } from "stores/commonStore";
 import { logOutFromFirebase } from "utils/firebase";
 import { useLoggedUserStore } from "stores/loggedUser";
 
 const ButtonAppBar = () => {
+  const { headerTitle } = useCommonStore();
   const { loggedUser } = useLoggedUserStore();
 
   return (
@@ -27,7 +29,7 @@ const ButtonAppBar = () => {
             </IconButton>
 
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              News
+              {headerTitle}
             </Typography>
 
             <Button color="inherit" onClick={logOutFromFirebase}>
