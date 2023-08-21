@@ -4,6 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import MenuIcon from "@mui/icons-material/Menu";
 import { CONTENT, isIOS } from "utils/constants";
 import IconButton from "@mui/material/IconButton";
+import Groups3Icon from '@mui/icons-material/Groups3';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { updateLastVisitedPage } from "utils/firebase";
@@ -12,7 +13,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 const ITEMS = [
   {
-    icon: MenuIcon,
+    icon: Groups3Icon,
     id: CONTENT.characters.id,
     title: CONTENT.characters.title,
   },
@@ -43,6 +44,7 @@ const SideMenu = () => {
         onOpen={openMenu}
         onClose={closeMenu}
         disableDiscovery={isIOS}
+        disableSwipeToOpen={false}
         disableBackdropTransition={!isIOS}
       >
         <br />
