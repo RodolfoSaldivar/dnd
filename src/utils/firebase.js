@@ -50,14 +50,33 @@ export const listenIfUserIsLogged = () => {
 //#region Users related
 export const listenToUserById = userId => {
   const dbRef = ref(database, "users/" + userId);
-  onValue(dbRef, snapshot => {
+  const unsubscribeFunction = onValue(dbRef, snapshot => {
     const loggedUser = snapshot.val();
     useLoggedUserStore.setState({ loggedUser });
   });
+  return unsubscribeFunction;
 };
 
 export const updateLastVisitedPage = pageName => {
   const userId = useLoggedUserStore.getState().userId;
   set(ref(database, `users/${userId}/lastVisitedPage`), pageName);
+};
+//#endregion
+
+//#region Characters related
+export const listenToCharacterById = (charId, onlyOnce = false) => {
+  const dbRef = ref(database, "characters/" + charId);
+  const unsubscribeFunction = onValue(
+    dbRef,
+    snapshot => {
+      const charInfo = snapshot.val();
+      charInfo &&
+        useLoggedUserStore.setState(prevState => ({
+          characters: new Map(prevState.characters).set(charId, charInfo),
+        }));
+    },
+    { onlyOnce },
+  );
+  return unsubscribeFunction;
 };
 //#endregion
