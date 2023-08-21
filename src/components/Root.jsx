@@ -1,7 +1,27 @@
-import React from "react";
+import Header from "./Header";
+import Login from "components/Login";
+import React, { useEffect } from "react";
+import MainContent from "components/MainContent";
+import { useLoggedUserStore } from "stores/loggedUser";
+import { listenToUserById, listenIfUserIsLogged } from "utils/firebase";
 
-const Root = () => {
-  return <div>Hello</div>;
-};
+export default function ButtonAppBar() {
+  const userId = useLoggedUserStore(state => state.userId);
+  const checkedIfLogged = useLoggedUserStore(state => state.checkedIfLogged);
 
-export default Root;
+  useEffect(listenIfUserIsLogged, []);
+  useEffect(() => {
+    if (!userId) return;
+    listenToUserById(userId);
+  }, [userId]);
+
+  if (!checkedIfLogged) return null;
+
+  return (
+    <div>
+      <Header />
+
+      {userId ? <MainContent /> : <Login />}
+    </div>
+  );
+}
