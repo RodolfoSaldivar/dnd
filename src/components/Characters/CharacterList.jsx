@@ -13,7 +13,7 @@ const CharacterList = ({
     <div className="grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2 sm:gap-y-7 lg:grid-cols-3">
       {characters.map(currChar => (
         <div key={currChar.id} className="flex justify-around">
-          <CharacterCard elevation={elevation} />
+          <CharacterCard elevation={elevation} character={currChar} />
         </div>
       ))}
 
