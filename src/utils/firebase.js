@@ -23,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
+//#region Auth related
 export const logOutFromFirebase = () => signOut(auth);
 
 export const signIntoFirebase = async (email, password) => {
@@ -35,19 +36,23 @@ export const signIntoFirebase = async (email, password) => {
   }
 };
 
-export const setLoggedUserIfExist = () => {
+export const listenIfUserIsLogged = () => {
   onAuthStateChanged(auth, async user => {
-    const { uid, email, metadata } = user || {};
-    const userData = { id: uid, email, metadata };
+    const { uid } = user || {};
     useLoggedUserStore.setState({
+      userId: uid || "",
       checkedIfLogged: true,
-      loggedUser: user ? userData : undefined,
     });
   });
 };
+//#endregion
 
-const starCountRef = ref(database, "users");
-onValue(starCountRef, snapshot => {
-  const data = snapshot.val();
-  // console.log("%c21 - data: ", "background-color: yellow", data);
-});
+//#region Users related
+export const listenToUserById = userId => {
+  const dbRef = ref(database, "users/" + userId);
+  onValue(dbRef, snapshot => {
+    const loggedUser = snapshot.val();
+    useLoggedUserStore.setState({ loggedUser });
+  });
+};
+//#endregion

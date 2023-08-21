@@ -10,13 +10,13 @@ import { logOutFromFirebase } from "utils/firebase";
 import { useLoggedUserStore } from "stores/loggedUser";
 
 const ButtonAppBar = () => {
+  const { userId } = useLoggedUserStore();
   const { headerTitle } = useCommonStore();
-  const { loggedUser } = useLoggedUserStore();
 
   return (
     <AppBar position="static">
       <Toolbar>
-        {loggedUser && (
+        {userId && (
           <>
             <IconButton
               size="large"
