@@ -10,7 +10,12 @@ const MyCharacters = () => {
   );
 
   useEffect(() => {
-    charactersToFetch?.forEach(charId => listenToCharacterById(charId, true));
+    const unsubscribeFunctions = charactersToFetch?.map(charId =>
+      listenToCharacterById(charId),
+    );
+    return () => {
+      unsubscribeFunctions.forEach(currFunc => currFunc());
+    };
   }, [charactersToFetch]);
 
   return (

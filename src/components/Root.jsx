@@ -1,7 +1,9 @@
 import Header from "./Header";
+import theme from "utils/theme";
 import Login from "components/Login";
 import React, { useEffect } from "react";
 import MainContent from "components/MainContent";
+import { ThemeProvider } from "@mui/material/styles";
 import { useLoggedUserStore } from "stores/loggedUser";
 import { listenToUserById, listenIfUserIsLogged } from "utils/firebase";
 
@@ -18,10 +20,9 @@ export default function ButtonAppBar() {
   if (!checkedIfLogged) return null;
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Header />
-
       {userId ? <MainContent /> : <Login />}
-    </div>
+    </ThemeProvider>
   );
 }

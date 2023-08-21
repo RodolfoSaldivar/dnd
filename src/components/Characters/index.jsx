@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { CONTENT } from "utils/constants";
-import Container from "@mui/material/Container";
 import { useCommonStoreActions } from "stores/commonStore";
 import MyCharacters from "components/Characters/MyCharacters";
+import ContentContainer from "components/reusable/ContentContainer";
 import CharacterAccordion from "components/Characters/CharacterAccordion";
 
 const Characters = () => {
@@ -10,14 +10,14 @@ const Characters = () => {
   useEffect(() => setHeaderTitle(CONTENT.characters.title), []);
 
   return (
-    <Container maxWidth="md" className="my-10">
+    <ContentContainer>
       <MyCharacters />
 
       <div className="mt-10">
         <CharacterAccordion />
         <CharacterAccordion />
       </div>
-    </Container>
+    </ContentContainer>
   );
 };
 
