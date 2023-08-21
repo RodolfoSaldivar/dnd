@@ -5,7 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import CharacterList from "components/Characters/CharacterList";
 
-const AccordionInstance = () => {
+const CharacterAccordion = () => {
   return (
     <Accordion elevation={3}>
       <AccordionSummary
@@ -16,10 +16,10 @@ const AccordionInstance = () => {
         <div>Tato</div>
       </AccordionSummary>
       <AccordionDetails>
-        <CharacterList />
+        {/* <CharacterList /> */}hi
       </AccordionDetails>
     </Accordion>
   );
 };
 
-export default AccordionInstance;
+export default CharacterAccordion;
