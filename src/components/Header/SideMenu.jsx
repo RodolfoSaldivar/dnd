@@ -1,14 +1,14 @@
 import List from "@mui/material/List";
 import React, { useState } from "react";
-import Drawer from "@mui/material/Drawer";
-import { CONTENT } from "utils/constants";
 import ListItem from "@mui/material/ListItem";
 import MenuIcon from "@mui/icons-material/Menu";
+import { CONTENT, isIOS } from "utils/constants";
 import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { updateLastVisitedPage } from "utils/firebase";
 import ListItemButton from "@mui/material/ListItemButton";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 const ITEMS = [
   {
@@ -21,6 +21,7 @@ const ITEMS = [
 const SideMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const openMenu = () => setIsOpen(true);
   const closeMenu = () => setIsOpen(false);
 
   return (
@@ -36,7 +37,14 @@ const SideMenu = () => {
         <MenuIcon />
       </IconButton>
 
-      <Drawer anchor="left" open={isOpen} onClose={closeMenu}>
+      <SwipeableDrawer
+        anchor="left"
+        open={isOpen}
+        onOpen={openMenu}
+        onClose={closeMenu}
+        disableDiscovery={isIOS}
+        disableBackdropTransition={!isIOS}
+      >
         <br />
         <List>
           {ITEMS.map(currItem => (
@@ -56,7 +64,7 @@ const SideMenu = () => {
             </ListItem>
           ))}
         </List>
-      </Drawer>
+      </SwipeableDrawer>
     </>
   );
 };

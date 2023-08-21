@@ -13,7 +13,7 @@ const Header = () => {
   const headerTitle = useCommonStore(state => state.headerTitle);
 
   return (
-    <AppBar position="static" sx={{ paddingX: 2 }}>
+    <AppBar position="static" className="sm:px-4">
       <Toolbar>
         {userId && (
           <>
