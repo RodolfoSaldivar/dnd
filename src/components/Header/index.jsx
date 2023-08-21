@@ -2,8 +2,7 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
-import MenuIcon from "@mui/icons-material/Menu";
-import IconButton from "@mui/material/IconButton";
+import SideMenu from "components/Header/SideMenu";
 import Typography from "@mui/material/Typography";
 import { useCommonStore } from "stores/commonStore";
 import { logOutFromFirebase } from "utils/firebase";
@@ -14,19 +13,11 @@ const Header = () => {
   const headerTitle = useCommonStore(state => state.headerTitle);
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ paddingX: 2 }}>
       <Toolbar>
         {userId && (
           <>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <SideMenu />
 
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               {headerTitle}

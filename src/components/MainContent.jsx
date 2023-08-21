@@ -14,9 +14,9 @@ const MainContent = () => {
   const ComponentToShow = (() => {
     switch (lastVisitedPage) {
       case "":
-      case CONTENT.characters:
+      case CONTENT.characters.id:
         return Characters;
-      case CONTENT.createCharacter:
+      case CONTENT.createCharacter.id:
         return Login;
     }
   })();

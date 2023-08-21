@@ -1,4 +1,4 @@
 export const CONTENT = {
-  characters: "characters",
-  createCharacter: "createCharacter",
+  characters: { id: "characters", title: "Personajes" },
+  createCharacter: { id: "createCharacter", title: "Crear Personaje" },
 };
