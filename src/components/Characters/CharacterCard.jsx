@@ -2,10 +2,10 @@ import React from "react";
 import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
 
-const CharacterCard = () => {
+const CharacterCard = ({ elevation }) => {
   return (
     <Paper
-      elevation={3}
+      elevation={elevation}
       className="flex w-[250px] cursor-pointer items-center p-4"
     >
       <Avatar

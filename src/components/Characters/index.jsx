@@ -11,7 +11,7 @@ const Characters = () => {
 
   return (
     <Container maxWidth="md" className="my-10">
-      <CharacterList showCreateButton />
+      <CharacterList showCreateButton elevation={3} />
 
       <div className="mt-10">
         <AccordionInstance />

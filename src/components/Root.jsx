@@ -6,7 +6,8 @@ import { useLoggedUserStore } from "stores/loggedUser";
 import { listenToUserById, listenIfUserIsLogged } from "utils/firebase";
 
 export default function ButtonAppBar() {
-  const { userId, checkedIfLogged } = useLoggedUserStore();
+  const userId = useLoggedUserStore(state => state.userId);
+  const checkedIfLogged = useLoggedUserStore(state => state.checkedIfLogged);
 
   useEffect(listenIfUserIsLogged, []);
   useEffect(() => {

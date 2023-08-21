@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { useLoggedUserStore } from "stores/loggedUser";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set } from "firebase/database";
 import {
   signOut,
   getAuth,
@@ -54,5 +54,10 @@ export const listenToUserById = userId => {
     const loggedUser = snapshot.val();
     useLoggedUserStore.setState({ loggedUser });
   });
+};
+
+export const updateLastVisitedPage = pageName => {
+  const userId = useLoggedUserStore.getState().userId;
+  set(ref(database, `users/${userId}/lastVisitedPage`), pageName);
 };
 //#endregion

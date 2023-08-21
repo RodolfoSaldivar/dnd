@@ -9,9 +9,9 @@ import { useCommonStore } from "stores/commonStore";
 import { logOutFromFirebase } from "utils/firebase";
 import { useLoggedUserStore } from "stores/loggedUser";
 
-const ButtonAppBar = () => {
-  const { userId } = useLoggedUserStore();
-  const { headerTitle } = useCommonStore();
+const Header = () => {
+  const userId = useLoggedUserStore(state => state.userId);
+  const headerTitle = useCommonStore(state => state.headerTitle);
 
   return (
     <AppBar position="static">
@@ -42,4 +42,4 @@ const ButtonAppBar = () => {
   );
 };
 
-export default ButtonAppBar;
+export default Header;

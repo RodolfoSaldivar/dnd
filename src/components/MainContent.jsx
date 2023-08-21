@@ -1,14 +1,18 @@
 import React from "react";
 import { CONTENT } from "utils/constants";
 import Characters from "components/Characters";
-import { useCommonStore } from "stores/commonStore";
+import { useLoggedUserStore } from "stores/loggedUser";
 import Login from "components/Login";
 
 const MainContent = () => {
-  const { contentToShow } = useCommonStore();
+  const lastVisitedPage = useLoggedUserStore(
+    state => state.loggedUser?.lastVisitedPage,
+  );
+
+  if (!lastVisitedPage) return null;
 
   const ComponentToShow = (() => {
-    switch (contentToShow) {
+    switch (lastVisitedPage) {
       case "":
       case CONTENT.characters:
         return Characters;
@@ -17,11 +21,7 @@ const MainContent = () => {
     }
   })();
 
-  return (
-    <div>
-      <ComponentToShow />
-    </div>
-  );
+  return <ComponentToShow />;
 };
 
 export default MainContent;
