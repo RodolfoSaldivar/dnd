@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Login from "components/Login";
 import React, { useEffect } from "react";
-import Characters from "components/Characters";
+import MainContent from "components/MainContent";
 import { setLoggedUserIfExist } from "utils/firebase";
 import { useLoggedUserStore } from "stores/loggedUser";
 
@@ -16,7 +16,7 @@ export default function ButtonAppBar() {
     <div>
       <Header />
 
-      {loggedUser ? <Characters /> : <Login />}
+      {loggedUser ? <MainContent /> : <Login />}
     </div>
   );
 }
