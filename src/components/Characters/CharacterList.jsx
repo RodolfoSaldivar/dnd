@@ -23,8 +23,11 @@ const CharacterList = ({
             onClick={() => updateLastVisitedPage(CONTENT.createCharacter.id)}
             className="flex min-h-[80px] w-[250px] animate-pulse cursor-pointer items-center justify-around rounded-md bg-gray-100 font-bold text-blue-400"
           >
-            Crear Personaje
-            <AddIcon fontSize="large" />
+            {characters.length ? (
+              <AddIcon fontSize="large" />
+            ) : (
+              "Crear Personaje"
+            )}
           </div>
         </div>
       )}

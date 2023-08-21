@@ -24,7 +24,10 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 
 //#region Auth related
-export const logOutFromFirebase = () => signOut(auth);
+export const logOutFromFirebase = () => {
+  signOut(auth);
+  window.location.reload();
+};
 
 export const signIntoFirebase = async (email, password) => {
   try {

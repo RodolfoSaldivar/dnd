@@ -10,7 +10,7 @@ const MyCharacters = () => {
   );
 
   useEffect(() => {
-    charactersToFetch.forEach(charId => listenToCharacterById(charId, true));
+    charactersToFetch?.forEach(charId => listenToCharacterById(charId, true));
   }, [charactersToFetch]);
 
   return (
