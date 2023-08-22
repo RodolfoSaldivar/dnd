@@ -214,4 +214,8 @@ export const listenToNoteContentById = (noteId, onlyOnce = false) => {
   );
   return unsubscribeFunction;
 };
+
+export const setNoteLockedValueInDb = (noteId, lockValue) => {
+  set(ref(database, `notes/${noteId}/isLocked`), !lockValue);
+};
 //#endregion
