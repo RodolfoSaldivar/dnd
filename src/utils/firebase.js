@@ -8,6 +8,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { useCharactersStore } from "stores/charactersStore";
 
 const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
@@ -51,6 +52,8 @@ export const listenIfUserIsLogged = () => {
 };
 //#endregion
 
+//================================================
+
 //#region Users related
 export const listenToLoggedUser = userId => {
   const dbRef = ref(database, "users/" + userId);
@@ -68,7 +71,19 @@ export const updateLastVisitedPage = (pageName, pageProps = null) => {
   set(ref(database, `users/${userId}/lastVisitedPage`), pageName);
   set(ref(database, `users/${userId}/lastVisitedPageProps`), pageProps);
 };
+
+export const deleteCharacterFromUser = (userId, charId) => {
+  set(ref(database, `characters/${charId}`), null);
+  set(ref(database, `users/${userId}/characters/${charId}`), null);
+  useLoggedUserStore.setState(prevState => {
+    const newState = new Map(prevState.characters);
+    newState.delete(charId);
+    return { characters: newState };
+  });
+};
 //#endregion
+
+//================================================
 
 //#region Characters related
 export const createNewCharacter = character => {
@@ -85,7 +100,7 @@ export const createNewCharacter = character => {
   set(ref(database, `users/${ownerId}/characters/${key}`), key);
 };
 
-export const listenToCharacterById = (charId, onlyOnce = false) => {
+export const listenToCharacterFromLoggedUser = (charId, onlyOnce = false) => {
   const dbRef = ref(database, "characters/" + charId);
   const unsubscribeFunction = onValue(
     dbRef,
@@ -95,6 +110,19 @@ export const listenToCharacterById = (charId, onlyOnce = false) => {
         useLoggedUserStore.setState(prevState => ({
           characters: new Map(prevState.characters).set(charId, charInfo),
         }));
+    },
+    { onlyOnce },
+  );
+  return unsubscribeFunction;
+};
+
+export const listenToCharacterById = (charId, onlyOnce = false) => {
+  const dbRef = ref(database, "characters/" + charId);
+  const unsubscribeFunction = onValue(
+    dbRef,
+    snapshot => {
+      const charInfo = snapshot.val();
+      charInfo && useCharactersStore.setState({ [charId]: charInfo });
     },
     { onlyOnce },
   );
