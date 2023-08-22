@@ -45,14 +45,11 @@ const NotesHeader = () => {
   };
 
   return (
-    <form
-      autoComplete="off"
-      onSubmit={addNewNote}
-      className="flex items-center gap-4"
-    >
+    <div className="flex flex-wrap items-center gap-4">
       <TextField
         value={filterText}
         variant="outlined"
+        autoComplete="off"
         placeholder="Titulo..."
         onChange={event => setFilterText(event.target.value)}
         sx={{ flexBasis: 400 }}
@@ -65,25 +62,36 @@ const NotesHeader = () => {
         }}
       />
 
-      <FormControlLabel
-        label="Mias"
-        control={
-          <Checkbox
-            checked={onlyMines}
-            onChange={event => setOnlyMines(event.target.checked)}
-          />
-        }
-      />
+      <div>
+        <FormControlLabel
+          label="Mias"
+          control={
+            <Checkbox
+              checked={onlyMines}
+              onChange={event => setOnlyMines(event.target.checked)}
+            />
+          }
+        />
+        <FormControlLabel
+          label="Colaborador"
+          control={
+            <Checkbox
+              checked={onlyMines}
+              onChange={event => setOnlyMines(event.target.checked)}
+            />
+          }
+        />
+      </div>
 
       <div className="flex flex-1 items-center justify-end">
         <button
-          type="submit"
+          onClick={addNewNote}
           className="cursor-pointer rounded-full bg-[#1976d2] p-3 text-white shadow-xl"
         >
           <AddIcon />
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 
