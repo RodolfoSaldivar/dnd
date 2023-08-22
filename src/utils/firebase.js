@@ -185,4 +185,37 @@ export const createNewNote = note => {
 export const updateNoteContentInFirebase = (noteId, content) => {
   set(ref(database, `notesContent/${noteId}`), content);
 };
+
+export const deleteNoteFromFirebase = (userId, noteId) => {
+  set(ref(database, `notes/${noteId}`), null);
+  set(ref(database, `notesContent/${noteId}`), null);
+  set(ref(database, `users/${userId}/notes/${noteId}`), null);
+  ["allNotes", "notesContent", "notesToDisplay"].map(key => {
+    useNotesStore.setState(prevState => {
+      const newState = new Map(prevState[key]);
+      newState.delete(noteId);
+      return { [key]: newState };
+    });
+  });
+};
+
+export const listenToNoteContentById = (noteId, onlyOnce = false) => {
+  const dbRef = ref(database, "notesContent/" + noteId);
+  const unsubscribeFunction = onValue(
+    dbRef,
+    snapshot => {
+      const content = snapshot.val();
+      !_.isNil(content) &&
+        useNotesStore.setState(prevState => ({
+          notesContent: new Map(prevState.notesContent).set(noteId, content),
+        }));
+    },
+    { onlyOnce },
+  );
+  return unsubscribeFunction;
+};
+
+export const setNoteLockedValueInDb = (noteId, lockValue) => {
+  set(ref(database, `notes/${noteId}/isLocked`), !lockValue);
+};
 //#endregion
