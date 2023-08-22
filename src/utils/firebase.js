@@ -198,4 +198,20 @@ export const deleteNoteFromFirebase = (userId, noteId) => {
     });
   });
 };
+
+export const listenToNoteContentById = (noteId, onlyOnce = false) => {
+  const dbRef = ref(database, "notesContent/" + noteId);
+  const unsubscribeFunction = onValue(
+    dbRef,
+    snapshot => {
+      const content = snapshot.val();
+      content &&
+        useNotesStore.setState(prevState => ({
+          notesContent: new Map(prevState.notesContent).set(noteId, content),
+        }));
+    },
+    { onlyOnce },
+  );
+  return unsubscribeFunction;
+};
 //#endregion

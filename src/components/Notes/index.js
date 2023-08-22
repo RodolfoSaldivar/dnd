@@ -3,12 +3,9 @@ import { CONTENT } from "utils/constants";
 import SaveNote from "components/Notes/SaveNote";
 import NotesHeader from "components/Notes/NotesHeader";
 import DisplayNotes from "components/Notes/DisplayNotes";
+import { getAllNotesFromFirebase } from "utils/firebase";
 import { useCommonStoreActions } from "stores/commonStore";
 import ContentContainer from "components/reusable/ContentContainer";
-import {
-  getAllNotesFromFirebase,
-  getAllNotesContentFromFirebase,
-} from "utils/firebase";
 
 const Notes = () => {
   const { setHeaderTitle } = useCommonStoreActions();
@@ -16,10 +13,8 @@ const Notes = () => {
 
   useEffect(() => {
     const notesUnsub = getAllNotesFromFirebase();
-    const contentUnsub = getAllNotesContentFromFirebase();
     return () => {
       notesUnsub();
-      contentUnsub();
     };
   }, []);
 

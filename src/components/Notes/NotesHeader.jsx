@@ -1,20 +1,28 @@
-import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
+import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useNotesStoreActions } from "stores/notesStore";
+import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
 
 const NotesHeader = () => {
   const [onlyMines, setOnlyMines] = useState(false);
   const [filterText, setFilterText] = useState("");
+  const allNotes = useNotesStore(state => state.allNotes);
+  const notesToDisplay = useNotesStore(state => state.notesToDisplay);
+  const { setSaveModalIsOpen, setNotesToDisplay } = useNotesStoreActions();
 
-  const { setSaveModalIsOpen } = useNotesStoreActions();
+  useEffect(() => {
+    if (filterText) return;
+    if (notesToDisplay.size) return;
+    if (!allNotes.size) return;
 
-  // const allNotes = useNotesStore(state => state.allNotes);
-  // console.log('%c16 - allNotes: ', 'background-color: yellow', allNotes);
+    setNotesToDisplay(new Map(allNotes));
+  }, [allNotes, notesToDisplay, filterText]);
+
+  // useEffect(() => {}, [filterText]);
 
   const addNewNote = event => {
     event.preventDefault();

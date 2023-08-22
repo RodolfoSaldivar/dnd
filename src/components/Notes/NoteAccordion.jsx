@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import Accordion from "@mui/material/Accordion";
 import IconButton from "@mui/material/IconButton";
@@ -11,12 +11,20 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import {
   deleteNoteFromFirebase,
+  listenToNoteContentById,
   updateNoteContentInFirebase,
 } from "utils/firebase";
 
 const NoteAccordion = ({ note }) => {
   const loggedUserId = useLoggedUserStore(state => state.userId);
-  const notesContent = useNotesStore(state => state.notesContent);
+  const noteContent = useNotesStore(state => state.notesContent.get(note.id));
+
+  useEffect(() => {
+    const unsub = listenToNoteContentById(note.id);
+    return () => {
+      unsub();
+    };
+  }, [note.id]);
 
   const onNoteChange = noteId => event => {
     updateNoteContentInFirebase(noteId, event.target.value);
@@ -47,9 +55,10 @@ const NoteAccordion = ({ note }) => {
           )}
         </div>
       </AccordionSummary>
+
       <AccordionDetails>
         <TextareaAutosize
-          value={notesContent.get(note.id)}
+          value={noteContent}
           onChange={onNoteChange(note.id)}
           className="w-full rounded-lg border p-4 outline-none ring-transparent"
         />
