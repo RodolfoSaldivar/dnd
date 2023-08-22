@@ -1,48 +1,100 @@
 import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import { createNewNote } from "utils/firebase";
 import TextField from "@mui/material/TextField";
-import { useUsersStore } from "stores/usersStore";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import { getUsersWithoutLoggedOne } from "utils/helpers";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
-import _ from "lodash";
 
 const SaveNote = () => {
   const [title, setTitle] = useState("");
+  const [triedToSave, setTriedToSave] = useState(false);
+  const [collaborators, setCollaborators] = useState(new Set());
 
-  const allUsers = useUsersStore();
+  const allUsers = getUsersWithoutLoggedOne();
   const { setSaveModalIsOpen } = useNotesStoreActions();
   const saveModalIsOpen = useNotesStore(state => state.saveModalIsOpen);
+
+  const closeModal = () => {
+    setSaveModalIsOpen(false);
+
+    setTimeout(() => {
+      setTitle("");
+      setTriedToSave(false);
+      setCollaborators(new Set());
+    }, 500);
+  };
+
+  const toggleCollaborator = userId => event => {
+    const { checked } = event.target;
+    const functionToRun = checked ? "add" : "delete";
+
+    setCollaborators(prevSet => {
+      const updatedSet = new Set(prevSet);
+      updatedSet[functionToRun](userId);
+      return updatedSet;
+    });
+  };
+
+  const createNote = event => {
+    event.preventDefault();
+    setTriedToSave(true);
+    if (!title) return;
+    createNewNote({
+      title,
+    });
+    closeModal();
+  };
 
   return (
     <Dialog
       fullWidth
       maxWidth="xs"
+      onClose={closeModal}
       open={saveModalIsOpen}
-      onClose={() => setSaveModalIsOpen(false)}
       aria-labelledby="notesSaveModal-title"
       aria-describedby="notesSaveModal-description"
     >
-      <div className="px-8 py-6 sm:px-12 sm:py-10">
+      <form
+        autoComplete="off"
+        onSubmit={createNote}
+        className="px-8 py-6 sm:px-12 sm:py-10"
+      >
         <TextField
           fullWidth
           value={title}
           label="Titulo"
           variant="standard"
+          error={!title && triedToSave}
           onChange={event => setTitle(event.target.value)}
         />
 
         <div className="mb-1 mt-5">Colaboradores:</div>
 
-        {_.values(allUsers).map(currUser => (
+        {allUsers.map(currUser => (
           <div key={currUser.id}>
             <FormControlLabel
-              label="Label"
-              control={<Checkbox sx={{ paddingY: 0.5 }} />}
+              label={currUser.name}
+              control={
+                <Checkbox
+                  sx={{ paddingY: 0.5 }}
+                  checked={collaborators.has(currUser.id)}
+                  onChange={toggleCollaborator(currUser.id)}
+                />
+              }
             />
           </div>
         ))}
-      </div>
+
+        <div className="mt-4 flex justify-end sm:mt-0">
+          <Button type="submit" variant="contained" endIcon={<NoteAddIcon />}>
+            Guardar
+          </Button>
+        </div>
+      </form>
     </Dialog>
   );
 };

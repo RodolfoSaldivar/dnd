@@ -152,4 +152,18 @@ export const getAllNotesFromFirebase = () => {
   });
   return unsubscribeFunction;
 };
+
+export const createNewNote = note => {
+  const ownerId = useLoggedUserStore.getState().userId;
+  const noteTableRef = ref(database, "notes");
+  const newNoteRef = push(noteTableRef);
+  const { key } = newNoteRef;
+
+  set(newNoteRef, {
+    ...note,
+    ownerId,
+    id: key,
+  });
+  set(ref(database, `users/${ownerId}/notes/${key}`), key);
+};
 //#endregion
