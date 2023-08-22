@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { useLoggedUserStore } from "stores/loggedUser";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import {
   signOut,
   getAuth,
@@ -67,6 +67,20 @@ export const updateLastVisitedPage = pageName => {
 //#endregion
 
 //#region Characters related
+export const createNewCharacter = character => {
+  const ownerId = useLoggedUserStore.getState().userId;
+  const characterTableRef = ref(database, "characters");
+  const newCharacterRef = push(characterTableRef);
+  const { key } = newCharacterRef;
+
+  set(newCharacterRef, {
+    ...character,
+    ownerId,
+    id: key,
+  });
+  set(ref(database, `users/${ownerId}/characters/${key}`), key);
+};
+
 export const listenToCharacterById = (charId, onlyOnce = false) => {
   const dbRef = ref(database, "characters/" + charId);
   const unsubscribeFunction = onValue(

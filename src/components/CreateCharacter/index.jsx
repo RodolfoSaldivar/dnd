@@ -1,10 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 import { CONTENT } from "utils/constants";
 import Backdrop from "@mui/material/Backdrop";
 import TextField from "@mui/material/TextField";
+import { createNewCharacter } from "utils/firebase";
 import { useCommonStoreActions } from "stores/commonStore";
 import AddReactionIcon from "@mui/icons-material/AddReaction";
 import React, { useCallback, useEffect, useState } from "react";
@@ -43,10 +43,8 @@ const CreateCharacter = () => {
   const createCharacterInDb = async event => {
     event.preventDefault();
     setTriedToCreate(true);
-
     if (infoIsMissing) return;
-
-    const newCharacter = {
+    createNewCharacter({
       name,
       race,
       clase,
@@ -54,8 +52,7 @@ const CreateCharacter = () => {
       image,
       alignment,
       background,
-      id: uuidv4(),
-    };
+    });
   };
 
   return (
