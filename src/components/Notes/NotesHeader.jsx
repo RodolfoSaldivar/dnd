@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
+import { useNotesStoreActions } from "stores/notesStore";
 
 const NotesHeader = () => {
   const [onlyMines, setOnlyMines] = useState(false);
@@ -13,8 +13,8 @@ const NotesHeader = () => {
 
   const { setSaveModalIsOpen } = useNotesStoreActions();
 
-  const allNotes = useNotesStore(state => state.allNotes);
-	// console.log('%c16 - allNotes: ', 'background-color: yellow', allNotes);
+  // const allNotes = useNotesStore(state => state.allNotes);
+  // console.log('%c16 - allNotes: ', 'background-color: yellow', allNotes);
 
   const addNewNote = event => {
     event.preventDefault();
