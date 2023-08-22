@@ -185,4 +185,17 @@ export const createNewNote = note => {
 export const updateNoteContentInFirebase = (noteId, content) => {
   set(ref(database, `notesContent/${noteId}`), content);
 };
+
+export const deleteNoteFromFirebase = (userId, noteId) => {
+  set(ref(database, `notes/${noteId}`), null);
+  set(ref(database, `notesContent/${noteId}`), null);
+  set(ref(database, `users/${userId}/notes/${noteId}`), null);
+  ["allNotes", "notesContent", "notesToDisplay"].map(key => {
+    useNotesStore.setState(prevState => {
+      const newState = new Map(prevState[key]);
+      newState.delete(noteId);
+      return { [key]: newState };
+    });
+  });
+};
 //#endregion

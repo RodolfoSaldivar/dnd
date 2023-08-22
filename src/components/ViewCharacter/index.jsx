@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import { useLoggedUserStore } from "stores/loggedUser";
 import { useCommonStoreActions } from "stores/commonStore";
 import { useCharactersStore } from "stores/charactersStore";
+import DeleteWarning from "components/reusable/DeleteWarning";
 import ContentContainer from "components/reusable/ContentContainer";
 import {
   listenToCharacterById,
@@ -36,9 +37,9 @@ const ViewCharacter = ({ characterId }) => {
       <pre>{JSON.stringify(characterInfo, null, 2)}</pre>
       <br />
       {deleteIsEnabled && (
-        <Button variant="contained" onClick={deleteChar}>
-          Eliminar
-        </Button>
+        <DeleteWarning deleteFunction={deleteChar}>
+          <Button variant="contained">Eliminar</Button>
+        </DeleteWarning>
       )}
     </ContentContainer>
   );

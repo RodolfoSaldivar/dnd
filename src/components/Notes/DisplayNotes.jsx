@@ -5,11 +5,14 @@ import IconButton from "@mui/material/IconButton";
 import { useNotesStore } from "stores/notesStore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLoggedUserStore } from "stores/loggedUser";
-import { updateNoteContentInFirebase } from "utils/firebase";
 import DeleteWarning from "components/reusable/DeleteWarning";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import {
+  deleteNoteFromFirebase,
+  updateNoteContentInFirebase,
+} from "utils/firebase";
 
 const DisplayNotes = () => {
   const loggedUserId = useLoggedUserStore(state => state.userId);
@@ -19,6 +22,9 @@ const DisplayNotes = () => {
   const onNoteChange = noteId => event => {
     updateNoteContentInFirebase(noteId, event.target.value);
   };
+
+  const deleteNote = (userId, noteId) => () =>
+    deleteNoteFromFirebase(userId, noteId);
 
   return (
     <div className="mt-7">
@@ -35,7 +41,9 @@ const DisplayNotes = () => {
                   <IconButton aria-label="update" size="large" color="primary">
                     <EditIcon fontSize="inherit" />
                   </IconButton>
-                  <DeleteWarning deleteFunction={() => {}}>
+                  <DeleteWarning
+                    deleteFunction={deleteNote(currNote.ownerId, currNote.id)}
+                  >
                     <IconButton aria-label="delete" size="large" color="error">
                       <DeleteIcon fontSize="inherit" />
                     </IconButton>

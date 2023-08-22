@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-// import { createNewNote } from "utils/firebase";
+import { createNewNote } from "utils/firebase";
 import TextField from "@mui/material/TextField";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import { getUsersWithoutLoggedOne } from "utils/helpers";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
+import { convertSetToObject, getUsersWithoutLoggedOne } from "utils/helpers";
 
 const SaveNote = () => {
   const [title, setTitle] = useState("");
@@ -43,10 +43,10 @@ const SaveNote = () => {
     event.preventDefault();
     setTriedToSave(true);
     if (!title) return;
-    // createNewNote({
-    //   title,
-    //   collaborators: convertSetToObject(collaborators),
-    // });
+    createNewNote({
+      title,
+      collaborators: convertSetToObject(collaborators),
+    });
     closeModal();
   };
 
