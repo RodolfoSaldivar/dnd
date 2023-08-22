@@ -3,6 +3,7 @@ import { CONTENT } from "utils/constants";
 import Characters from "components/Characters";
 import ViewCharacter from "components/ViewCharacter";
 import { useLoggedUserStore } from "stores/loggedUser";
+import { updateLastVisitedPage } from "utils/firebase";
 import CreateCharacter from "components/CreateCharacter";
 
 const MainContent = () => {
@@ -13,7 +14,10 @@ const MainContent = () => {
     state => state.loggedUser?.lastVisitedPageProps,
   );
 
-  if (!lastVisitedPage) return null;
+  if (!lastVisitedPage) {
+    updateLastVisitedPage(CONTENT.characters.id);
+    return null;
+  }
 
   const ComponentToShow = (() => {
     switch (lastVisitedPage) {
