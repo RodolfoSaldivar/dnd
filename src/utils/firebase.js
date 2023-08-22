@@ -1,6 +1,8 @@
 import _ from "lodash";
 import { initializeApp } from "firebase/app";
+import { useUsersStore } from "stores/usersStore";
 import { useLoggedUserStore } from "stores/loggedUser";
+import { useCharactersStore } from "stores/charactersStore";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import {
   signOut,
@@ -8,7 +10,6 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { useCharactersStore } from "stores/charactersStore";
 
 const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
@@ -80,6 +81,15 @@ export const deleteCharacterFromUser = (userId, charId) => {
     newState.delete(charId);
     return { characters: newState };
   });
+};
+
+export const getAllUsersFromFirebase = () => {
+  const dbRef = ref(database, "users");
+  const unsubscribeFunction = onValue(dbRef, snapshot => {
+    const allUsers = snapshot.val();
+    useUsersStore.setState(allUsers);
+  });
+  return unsubscribeFunction;
 };
 //#endregion
 

@@ -18,8 +18,8 @@ const CharacterCard = ({ elevation, character }) => {
     >
       <Avatar
         alt={character.name}
-        src={character.image}
         className="font-medium"
+        src={character.image || " "}
         sx={{ width: 50, height: 50, fontSize: 25 }}
       />
 
