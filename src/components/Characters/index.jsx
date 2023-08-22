@@ -7,7 +7,6 @@ import OthersCharacters from "components/Characters/OthersCharacters";
 
 const Characters = () => {
   const { setHeaderTitle } = useCommonStoreActions();
-
   useEffect(() => setHeaderTitle(CONTENT.characters.title), []);
 
   return (
