@@ -205,7 +205,7 @@ export const listenToNoteContentById = (noteId, onlyOnce = false) => {
     dbRef,
     snapshot => {
       const content = snapshot.val();
-      content &&
+      !_.isNil(content) &&
         useNotesStore.setState(prevState => ({
           notesContent: new Map(prevState.notesContent).set(noteId, content),
         }));
