@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { initializeApp } from "firebase/app";
 import { useLoggedUserStore } from "stores/loggedUser";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
@@ -51,11 +52,13 @@ export const listenIfUserIsLogged = () => {
 //#endregion
 
 //#region Users related
-export const listenToUserById = userId => {
+export const listenToLoggedUser = userId => {
   const dbRef = ref(database, "users/" + userId);
   const unsubscribeFunction = onValue(dbRef, snapshot => {
-    const loggedUser = snapshot.val();
-    useLoggedUserStore.setState({ loggedUser });
+    const userInfo = snapshot.val();
+    useLoggedUserStore.setState({
+      loggedUser: { ...userInfo, characters: _.values(userInfo?.characters) },
+    });
   });
   return unsubscribeFunction;
 };

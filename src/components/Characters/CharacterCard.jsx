@@ -20,7 +20,7 @@ const CharacterCard = ({ elevation, character }) => {
         <Typography noWrap variant="h5" width={150}>
           {character.name}
         </Typography>
-        <p className="text-sm">{`${character.class} nivel ${character.level}`}</p>
+        <p className="text-sm">{`${character.clase} nivel ${character.level}`}</p>
       </div>
     </Paper>
   );
