@@ -63,9 +63,10 @@ export const listenToLoggedUser = userId => {
   return unsubscribeFunction;
 };
 
-export const updateLastVisitedPage = pageName => {
+export const updateLastVisitedPage = (pageName, pageProps = null) => {
   const userId = useLoggedUserStore.getState().userId;
   set(ref(database, `users/${userId}/lastVisitedPage`), pageName);
+  set(ref(database, `users/${userId}/lastVisitedPageProps`), pageProps);
 };
 //#endregion
 
