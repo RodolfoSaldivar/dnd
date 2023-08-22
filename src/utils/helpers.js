@@ -7,3 +7,8 @@ export const getUsersWithoutLoggedOne = () => {
   const loggedUserId = useLoggedUserStore.getState().userId;
   return _.filter(allUsers, ({ id }) => id !== loggedUserId);
 };
+
+export const convertSetToObject = theSet => {
+  const pairs = [...theSet].map(item => [item, item]);
+  return _.fromPairs(pairs);
+};

@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 export const useNotesStore = create(set => ({
-  allNotes: {},
-  notesContent: {},
-  notesToDisplay: {},
+  allNotes: new Map(),
+  notesContent: new Map(),
+  notesToDisplay: new Map(),
   saveModalIsOpen: false,
   actions: {
     setNotesToDisplay: notesToDisplay => set(() => ({ notesToDisplay })),

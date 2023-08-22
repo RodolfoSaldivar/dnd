@@ -147,8 +147,11 @@ export const listenToCharacterById = (charId, onlyOnce = false) => {
 export const getAllNotesFromFirebase = () => {
   const dbRef = ref(database, "notes");
   const unsubscribeFunction = onValue(dbRef, snapshot => {
-    const allNotes = snapshot.val();
-    allNotes && useNotesStore.setState({ allNotes });
+    const notesInfo = snapshot.val();
+    if (notesInfo) {
+      const allNotes = new Map(_.entries(notesInfo));
+      useNotesStore.setState({ allNotes });
+    }
   });
   return unsubscribeFunction;
 };
