@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import Accordion from "@mui/material/Accordion";
@@ -19,6 +20,10 @@ const NoteAccordion = ({ note }) => {
   const loggedUserId = useLoggedUserStore(state => state.userId);
   const noteContent = useNotesStore(state => state.notesContent.get(note.id));
 
+  const canCollaborate =
+    note.ownerId === loggedUserId ||
+    _.findKey(note.collaborators, currCollId => currCollId === loggedUserId);
+
   useEffect(() => {
     const unsub = listenToNoteContentById(note.id);
     return () => {
@@ -39,16 +44,17 @@ const NoteAccordion = ({ note }) => {
         id={`noteAccordion-${note.id}-header`}
         aria-controls={`noteAccordion-${note.id}-content`}
       >
-        <div className="flex w-full items-center gap-5 text-lg font-medium">
+        <div className="flex w-full items-center gap-3 text-lg font-medium">
           <div className="flex-1">{note.title}</div>
+
           {note.ownerId === loggedUserId && (
             <>
-              <IconButton aria-label="update" size="large" color="primary">
-                <EditIcon fontSize="inherit" />
+              <IconButton aria-label="update" color="primary">
+                <EditIcon />
               </IconButton>
               <DeleteWarning deleteFunction={deleteNote(note.ownerId, note.id)}>
-                <IconButton aria-label="delete" size="large" color="error">
-                  <DeleteIcon fontSize="inherit" />
+                <IconButton aria-label="delete" color="error">
+                  <DeleteIcon />
                 </IconButton>
               </DeleteWarning>
             </>
@@ -59,6 +65,7 @@ const NoteAccordion = ({ note }) => {
       <AccordionDetails>
         <TextareaAutosize
           value={noteContent}
+          disabled={!canCollaborate}
           onChange={onNoteChange(note.id)}
           className="w-full rounded-lg border p-4 outline-none ring-transparent"
         />
