@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import ContentContainer from "components/reusable/ContentContainer";
-import { useCommonStoreActions } from "stores/commonStore";
 import { CONTENT } from "utils/constants";
+import NotesHeader from "components/Notes/NotesHeader";
+import { useCommonStoreActions } from "stores/commonStore";
+import ContentContainer from "components/reusable/ContentContainer";
 
 const Notes = () => {
   const { setHeaderTitle } = useCommonStoreActions();
@@ -9,7 +10,7 @@ const Notes = () => {
 
   return (
     <ContentContainer>
-      <div>hi</div>
+      <NotesHeader />
     </ContentContainer>
   );
 };
