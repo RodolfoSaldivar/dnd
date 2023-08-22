@@ -2,15 +2,21 @@ import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import UndoIcon from "@mui/icons-material/Undo";
 import WarningIcon from "@mui/icons-material/Warning";
-import React, { cloneElement, useCallback, useState } from "react";
+import React, { cloneElement, useCallback, useEffect, useState } from "react";
 
 const DeleteWarning = ({ children, deleteFunction }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [deleteIsDisabled, setDeleteIsDisabled] = useState(true);
 
+  useEffect(() => {
+    if (!isOpen && !deleteIsDisabled) {
+      setDeleteIsDisabled(true);
+    }
+  }, [isOpen, deleteIsDisabled]);
+
   const openDialog = () => {
     setIsOpen(true);
-    setTimeout(() => setDeleteIsDisabled(false), 1200);
+    setTimeout(() => setDeleteIsDisabled(false), 1000);
   };
   const closeDialog = () => {
     setIsOpen(false);
