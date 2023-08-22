@@ -156,6 +156,18 @@ export const getAllNotesFromFirebase = () => {
   return unsubscribeFunction;
 };
 
+export const getAllNotesContentFromFirebase = () => {
+  const dbRef = ref(database, "notesContent");
+  const unsubscribeFunction = onValue(dbRef, snapshot => {
+    const notesInfo = snapshot.val();
+    if (notesInfo) {
+      const notesContent = new Map(_.entries(notesInfo));
+      useNotesStore.setState({ notesContent });
+    }
+  });
+  return unsubscribeFunction;
+};
+
 export const createNewNote = note => {
   const ownerId = useLoggedUserStore.getState().userId;
   const noteTableRef = ref(database, "notes");
@@ -168,5 +180,9 @@ export const createNewNote = note => {
     id: key,
   });
   set(ref(database, `users/${ownerId}/notes/${key}`), key);
+};
+
+export const updateNoteContentInFirebase = (noteId, content) => {
+  set(ref(database, `notesContent/${noteId}`), content);
 };
 //#endregion

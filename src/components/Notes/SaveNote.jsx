@@ -43,10 +43,10 @@ const SaveNote = () => {
     event.preventDefault();
     setTriedToSave(true);
     if (!title) return;
-    createNewNote({
-      title,
-      collaborators: convertSetToObject(collaborators),
-    });
+    // createNewNote({
+    //   title,
+    //   collaborators: convertSetToObject(collaborators),
+    // });
     closeModal();
   };
 

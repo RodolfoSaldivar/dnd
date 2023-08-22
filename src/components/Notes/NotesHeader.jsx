@@ -14,6 +14,7 @@ const NotesHeader = () => {
   const { setSaveModalIsOpen } = useNotesStoreActions();
 
   const allNotes = useNotesStore(state => state.allNotes);
+	// console.log('%c16 - allNotes: ', 'background-color: yellow', allNotes);
 
   const addNewNote = event => {
     event.preventDefault();
