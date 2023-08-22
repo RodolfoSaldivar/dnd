@@ -1,11 +1,11 @@
-import React from "react";
 import Notes from "components/Notes";
+import React, { useEffect } from "react";
 import { CONTENT } from "utils/constants";
 import Characters from "components/Characters";
 import ViewCharacter from "components/ViewCharacter";
 import { useLoggedUserStore } from "stores/loggedUser";
-import { updateLastVisitedPage } from "utils/firebase";
 import CreateCharacter from "components/CreateCharacter";
+import { getAllUsersFromFirebase, updateLastVisitedPage } from "utils/firebase";
 
 const MainContent = () => {
   const loggedUserId = useLoggedUserStore(state => state.loggedUser?.id);
@@ -15,6 +15,8 @@ const MainContent = () => {
   const lastVisitedPageProps = useLoggedUserStore(
     state => state.loggedUser?.lastVisitedPageProps,
   );
+
+  useEffect(getAllUsersFromFirebase, []);
 
   if (loggedUserId && !lastVisitedPage) {
     updateLastVisitedPage(CONTENT.characters.id);

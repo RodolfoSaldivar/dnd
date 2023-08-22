@@ -1,18 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
 
 const NotesHeader = () => {
+  const [onlyMines, setOnlyMines] = useState(false);
+  const [filterText, setFilterText] = useState("");
+
+  const { setSaveModalIsOpen } = useNotesStoreActions();
+
+  const allNotes = useNotesStore(state => state.allNotes);
+
+  const addNewNote = event => {
+    event.preventDefault();
+    setSaveModalIsOpen(true);
+  };
+
   return (
-    <div className="flex items-center gap-4">
+    <form
+      autoComplete="off"
+      onSubmit={addNewNote}
+      className="flex items-center gap-4"
+    >
       <TextField
-        sx={{ flexBasis: 400 }}
+        value={filterText}
         variant="outlined"
         placeholder="Titulo..."
+        onChange={event => setFilterText(event.target.value)}
+        sx={{ flexBasis: 400 }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -22,14 +41,25 @@ const NotesHeader = () => {
         }}
       />
 
-      <FormControlLabel control={<Checkbox />} label="Mias" />
+      <FormControlLabel
+        label="Mias"
+        control={
+          <Checkbox
+            checked={onlyMines}
+            onChange={event => setOnlyMines(event.target.checked)}
+          />
+        }
+      />
 
       <div className="flex flex-1 items-center justify-end">
-        <div className="cursor-pointer rounded-full bg-[#1976d2] p-3 text-white shadow-xl">
+        <button
+          type="submit"
+          className="cursor-pointer rounded-full bg-[#1976d2] p-3 text-white shadow-xl"
+        >
           <AddIcon />
-        </div>
+        </button>
       </div>
-    </div>
+    </form>
   );
 };
 

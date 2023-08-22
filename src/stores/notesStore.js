@@ -1,11 +1,13 @@
 import { create } from "zustand";
 
 export const useNotesStore = create(set => ({
-  allNotesNames: {},
+  allNotes: {},
+  notesContent: {},
   notesToDisplay: {},
-  allNotesContent: {},
+  saveModalIsOpen: false,
   actions: {
     setNotesToDisplay: notesToDisplay => set(() => ({ notesToDisplay })),
+    setSaveModalIsOpen: saveModalIsOpen => set(() => ({ saveModalIsOpen })),
   },
 }));
 

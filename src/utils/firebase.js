@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { initializeApp } from "firebase/app";
 import { useUsersStore } from "stores/usersStore";
+import { useNotesStore } from "stores/notesStore";
 import { useLoggedUserStore } from "stores/loggedUser";
 import { useCharactersStore } from "stores/charactersStore";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
@@ -68,9 +69,9 @@ export const listenToLoggedUser = userId => {
 };
 
 export const updateLastVisitedPage = (pageName, pageProps = null) => {
-  const userId = useLoggedUserStore.getState().userId;
-  set(ref(database, `users/${userId}/lastVisitedPage`), pageName);
-  set(ref(database, `users/${userId}/lastVisitedPageProps`), pageProps);
+  const loggedUserId = useLoggedUserStore.getState().userId;
+  set(ref(database, `users/${loggedUserId}/lastVisitedPage`), pageName);
+  set(ref(database, `users/${loggedUserId}/lastVisitedPageProps`), pageProps);
 };
 
 export const deleteCharacterFromUser = (userId, charId) => {
@@ -87,7 +88,7 @@ export const getAllUsersFromFirebase = () => {
   const dbRef = ref(database, "users");
   const unsubscribeFunction = onValue(dbRef, snapshot => {
     const allUsers = snapshot.val();
-    useUsersStore.setState(allUsers);
+    useUsersStore.setState(allUsers, true);
   });
   return unsubscribeFunction;
 };
@@ -136,6 +137,19 @@ export const listenToCharacterById = (charId, onlyOnce = false) => {
     },
     { onlyOnce },
   );
+  return unsubscribeFunction;
+};
+//#endregion
+
+//================================================
+
+//#region Notes
+export const getAllNotesFromFirebase = () => {
+  const dbRef = ref(database, "notes");
+  const unsubscribeFunction = onValue(dbRef, snapshot => {
+    const allNotes = snapshot.val();
+    allNotes && useNotesStore.setState({ allNotes });
+  });
   return unsubscribeFunction;
 };
 //#endregion

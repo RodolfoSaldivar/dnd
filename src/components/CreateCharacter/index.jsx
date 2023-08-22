@@ -42,7 +42,7 @@ const CreateCharacter = () => {
     [triedToCreate],
   );
 
-  const createCharacterInDb = async event => {
+  const createCharacterInDb = event => {
     event.preventDefault();
     setTriedToCreate(true);
     if (infoIsMissing) return;

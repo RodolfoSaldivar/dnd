@@ -1,20 +1,14 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
-import { useUsersStore } from "stores/usersStore";
-import { useLoggedUserStore } from "stores/loggedUser";
-import { getAllUsersFromFirebase } from "utils/firebase";
+import React from "react";
+import { getUsersWithoutLoggedOne } from "utils/helpers";
 import CharacterAccordion from "components/Characters/CharacterAccordion";
 
 const OthersCharacters = () => {
-  const allUsers = useUsersStore();
-  const loggedUserId = useLoggedUserStore(state => state.userId);
-
-  useEffect(() => getAllUsersFromFirebase(), []);
-
-  const usersWithCharacters = _.filter(allUsers, currUser => {
-    if (currUser.id === loggedUserId) return false;
-    return !!currUser.characters;
-  });
+  const withoutLogged = getUsersWithoutLoggedOne();
+  const usersWithCharacters = _.filter(
+    withoutLogged,
+    ({ characters }) => !!characters,
+  );
 
   return (
     <div className="mt-10">
