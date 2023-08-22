@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLoggedUserStore } from "stores/loggedUser";
-import { listenToCharacterById } from "utils/firebase";
 import CharacterList from "components/Characters/CharacterList";
+import { listenToCharacterFromLoggedUser } from "utils/firebase";
 
 const MyCharacters = () => {
   const fetchedCharacters = useLoggedUserStore(state => state.characters);
@@ -10,7 +10,12 @@ const MyCharacters = () => {
   );
 
   useEffect(() => {
-    charactersToFetch?.forEach(charId => listenToCharacterById(charId, true));
+    const unsubscribeFunctions = charactersToFetch?.map(charId =>
+      listenToCharacterFromLoggedUser(charId),
+    );
+    return () => {
+      unsubscribeFunctions.forEach(currFunc => currFunc());
+    };
   }, [charactersToFetch]);
 
   return (

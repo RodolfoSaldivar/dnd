@@ -3,7 +3,7 @@ import Login from "components/Login";
 import React, { useEffect } from "react";
 import MainContent from "components/MainContent";
 import { useLoggedUserStore } from "stores/loggedUser";
-import { listenToUserById, listenIfUserIsLogged } from "utils/firebase";
+import { listenToLoggedUser, listenIfUserIsLogged } from "utils/firebase";
 
 export default function ButtonAppBar() {
   const userId = useLoggedUserStore(state => state.userId);
@@ -12,7 +12,10 @@ export default function ButtonAppBar() {
   useEffect(listenIfUserIsLogged, []);
   useEffect(() => {
     if (!userId) return;
-    listenToUserById(userId);
+    const unsub = listenToLoggedUser(userId);
+    return () => {
+      unsub();
+    };
   }, [userId]);
 
   if (!checkedIfLogged) return null;
@@ -20,7 +23,6 @@ export default function ButtonAppBar() {
   return (
     <div>
       <Header />
-
       {userId ? <MainContent /> : <Login />}
     </div>
   );
