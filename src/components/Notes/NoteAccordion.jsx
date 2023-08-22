@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { useEffect } from "react";
 import LockIcon from "@mui/icons-material/Lock";
 import EditIcon from "@mui/icons-material/Edit";
@@ -23,10 +22,7 @@ const NoteAccordion = ({ note }) => {
   const loggedUserId = useLoggedUserStore(state => state.userId);
   const noteContent = useNotesStore(state => state.notesContent.get(note.id));
 
-  const canCollaborate = _.findKey(
-    note.collaborators,
-    currCollId => currCollId === loggedUserId,
-  );
+  const canCollaborate = !!note.collaborators?.[loggedUserId];
   const canType = note.ownerId === loggedUserId || canCollaborate;
 
   useEffect(() => {

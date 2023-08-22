@@ -10,7 +10,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
 
 const NotesHeader = () => {
-  const [onlyMines, setOnlyMines] = useState(false);
+  const [mines, setMines] = useState(false);
+  const [imCollab, setImCollab] = useState(false);
   const [filterText, setFilterText] = useState("");
   const allNotes = useNotesStore(state => state.allNotes);
   const loggedUserId = useLoggedUserStore(state => state.userId);
@@ -21,7 +22,9 @@ const NotesHeader = () => {
   }, [allNotes]);
 
   useEffect(() => {
-    if (!filterText && !onlyMines) setNotesToDisplay(new Map(allNotes));
+    if (!filterText && !mines && !imCollab) {
+      return setNotesToDisplay(new Map(allNotes));
+    }
 
     let tempNotes = new Map(allNotes);
     if (filterText) {
@@ -31,13 +34,17 @@ const NotesHeader = () => {
         ),
       );
     }
-    if (onlyMines) {
+    if (mines || imCollab) {
       tempNotes = new Map(
-        [...tempNotes].filter(([, { ownerId }]) => ownerId === loggedUserId),
+        [...tempNotes].filter(([, { ownerId, collaborators }]) => {
+          if (mines && ownerId === loggedUserId) return true;
+          if (imCollab && !!collaborators?.[loggedUserId]) return true;
+          return false;
+        }),
       );
     }
     setNotesToDisplay(tempNotes);
-  }, [filterText, onlyMines, loggedUserId]);
+  }, [filterText, mines, loggedUserId, imCollab]);
 
   const addNewNote = event => {
     event.preventDefault();
@@ -67,8 +74,8 @@ const NotesHeader = () => {
           label="Mias"
           control={
             <Checkbox
-              checked={onlyMines}
-              onChange={event => setOnlyMines(event.target.checked)}
+              checked={mines}
+              onChange={event => setMines(event.target.checked)}
             />
           }
         />
@@ -76,8 +83,8 @@ const NotesHeader = () => {
           label="Colaborador"
           control={
             <Checkbox
-              checked={onlyMines}
-              onChange={event => setOnlyMines(event.target.checked)}
+              checked={imCollab}
+              onChange={event => setImCollab(event.target.checked)}
             />
           }
         />
