@@ -12,3 +12,7 @@ export const convertSetToObject = theSet => {
   const pairs = [...theSet].map(item => [item, item]);
   return _.fromPairs(pairs);
 };
+
+export const isSubstringOf = (word, sentence) => {
+  return sentence.toLowerCase().includes(word.toLowerCase());
+};
