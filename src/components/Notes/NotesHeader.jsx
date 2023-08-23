@@ -18,10 +18,6 @@ const NotesHeader = () => {
   const { setSaveModalIsOpen, setNotesToDisplay } = useNotesStoreActions();
 
   useEffect(() => {
-    setNotesToDisplay(new Map(allNotes));
-  }, [allNotes]);
-
-  useEffect(() => {
     if (!filterText && !mines && !imCollab) {
       return setNotesToDisplay(new Map(allNotes));
     }
@@ -44,7 +40,7 @@ const NotesHeader = () => {
       );
     }
     setNotesToDisplay(tempNotes);
-  }, [filterText, mines, loggedUserId, imCollab]);
+  }, [filterText, mines, loggedUserId, imCollab, allNotes]);
 
   const addNewNote = event => {
     event.preventDefault();

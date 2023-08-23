@@ -23,6 +23,11 @@ const DeleteWarning = ({ children, deleteFunction }) => {
     setDeleteIsDisabled(true);
   };
 
+  const deleteForEver = () => {
+    closeDialog();
+    deleteFunction();
+  };
+
   const ComponentAskingToDelete = useCallback(
     () =>
       cloneElement(children, {
@@ -53,7 +58,7 @@ const DeleteWarning = ({ children, deleteFunction }) => {
             <Button
               color="error"
               variant="contained"
-              onClick={deleteFunction}
+              onClick={deleteForEver}
               disabled={deleteIsDisabled}
             >
               Si

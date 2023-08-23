@@ -5,6 +5,7 @@ import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import React, { useEffect, useState } from "react";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import DeleteNoteBtn from "components/Notes/DeleteNoteBtn";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
 import { createNewNote, updateCompleteNoteInDb } from "utils/firebase";
@@ -121,6 +122,10 @@ const SaveNote = () => {
           <Button type="submit" variant="contained" endIcon={<NoteAddIcon />}>
             Guardar
           </Button>
+
+          <div className="ml-5 sm:hidden">
+            <DeleteNoteBtn note={noteToUpdate} />
+          </div>
         </div>
       </form>
     </Dialog>
