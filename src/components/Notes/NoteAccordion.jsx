@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import classNames from "classnames";
 import LockIcon from "@mui/icons-material/Lock";
 import EditIcon from "@mui/icons-material/Edit";
 import Accordion from "@mui/material/Accordion";
 import IconButton from "@mui/material/IconButton";
 import { useNotesStore } from "stores/notesStore";
+import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLoggedUserStore } from "stores/loggedUser";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
@@ -22,6 +23,7 @@ import {
 } from "utils/firebase";
 
 const NoteAccordion = ({ note }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const loggedUserId = useLoggedUserStore(state => state.userId);
   const noteContent = useNotesStore(state => state.notesContent.get(note.id));
 
@@ -34,6 +36,8 @@ const NoteAccordion = ({ note }) => {
       unsub();
     };
   }, [note.id]);
+
+  const toggleIsOpen = () => setIsOpen(state => !state);
 
   const onNoteChange = event => {
     updateNoteContentInFirebase(note.id, event.target.value);
@@ -52,17 +56,21 @@ const NoteAccordion = ({ note }) => {
   };
 
   return (
-    <Accordion
-      key={note.id}
-      elevation={3}
-      // expanded={sadasdasdadasasadasdasdadasa}
-    >
+    <Accordion key={note.id} elevation={3} expanded={isOpen}>
       <AccordionSummary
         id={`noteAccordion-${note.id}-header`}
         aria-controls={`noteAccordion-${note.id}-content`}
       >
-        <div className="flex w-full items-center gap-3 text-lg font-medium">
-          <div className="flex-1">{note.title}</div>
+        <div className="flex w-full items-center gap-1 text-lg font-medium">
+          <div
+            onClick={toggleIsOpen}
+            className={classNames(
+              "flex-1",
+              isOpen ? "-my-6 py-6" : "-my-3 py-3",
+            )}
+          >
+            {note.title}
+          </div>
 
           {note.ownerId === loggedUserId && (
             <>
