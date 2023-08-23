@@ -2,14 +2,11 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteNoteFromFirebase } from "utils/firebase";
-import { useNotesStoreActions } from "stores/notesStore";
 import DeleteWarning from "components/reusable/DeleteWarning";
 
-const DeleteNoteBtn = ({ note }) => {
-  const { setSaveModalIsOpen } = useNotesStoreActions();
-
+const DeleteNoteBtn = ({ note, callbackFunction = null }) => {
   const deleteNote = () => {
-    setSaveModalIsOpen(false);
+    callbackFunction && callbackFunction();
     deleteNoteFromFirebase(note.ownerId, note.id);
   };
 

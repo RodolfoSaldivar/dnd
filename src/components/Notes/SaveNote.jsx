@@ -26,7 +26,7 @@ const SaveNote = () => {
     if (!noteToUpdate) return;
 
     setTitle(noteToUpdate.title);
-    setHidden(noteToUpdate.hidden);
+    setHidden(!!noteToUpdate.hidden);
     setCollaborators(new Set(_.values(noteToUpdate.collaborators)));
   }, [noteToUpdate]);
 
@@ -123,9 +123,14 @@ const SaveNote = () => {
             Guardar
           </Button>
 
-          <div className="ml-5 sm:hidden">
-            <DeleteNoteBtn note={noteToUpdate} />
-          </div>
+          {noteToUpdate && (
+            <div className="ml-5 sm:hidden">
+              <DeleteNoteBtn
+                note={noteToUpdate}
+                callbackFunction={closeModal}
+              />
+            </div>
+          )}
         </div>
       </form>
     </Dialog>
