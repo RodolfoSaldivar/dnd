@@ -1,30 +1,45 @@
-import React, { useState } from "react";
+import _ from "lodash";
 import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
-import { createNewNote } from "utils/firebase";
 import TextField from "@mui/material/TextField";
+import React, { useEffect, useState } from "react";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import DeleteNoteBtn from "components/Notes/DeleteNoteBtn";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useNotesStore, useNotesStoreActions } from "stores/notesStore";
+import { createNewNote, updateCompleteNoteInDb } from "utils/firebase";
 import { convertSetToObject, getUsersWithoutLoggedOne } from "utils/helpers";
 
 const SaveNote = () => {
   const [title, setTitle] = useState("");
+  const [hidden, setHidden] = useState(false);
   const [triedToSave, setTriedToSave] = useState(false);
   const [collaborators, setCollaborators] = useState(new Set());
 
   const allUsers = getUsersWithoutLoggedOne();
-  const { setSaveModalIsOpen } = useNotesStoreActions();
+  const noteToUpdate = useNotesStore(state => state.noteToUpdate);
   const saveModalIsOpen = useNotesStore(state => state.saveModalIsOpen);
+  const { setNoteToUpdate, setSaveModalIsOpen } = useNotesStoreActions();
+
+  useEffect(() => {
+    if (!noteToUpdate) return;
+
+    setTitle(noteToUpdate.title);
+    setHidden(!!noteToUpdate.hidden);
+    setCollaborators(new Set(_.values(noteToUpdate.collaborators)));
+  }, [noteToUpdate]);
 
   const closeModal = () => {
     setSaveModalIsOpen(false);
 
     setTimeout(() => {
       setTitle("");
+      setHidden(false);
       setTriedToSave(false);
       setCollaborators(new Set());
+
+      setNoteToUpdate(null);
     }, 500);
   };
 
@@ -43,10 +58,18 @@ const SaveNote = () => {
     event.preventDefault();
     setTriedToSave(true);
     if (!title) return;
-    createNewNote({
+
+    const noteValues = {
       title,
+      hidden,
       collaborators: convertSetToObject(collaborators),
-    });
+    };
+
+    if (noteToUpdate) {
+      updateCompleteNoteInDb({ ...noteToUpdate, ...noteValues });
+    } else {
+      createNewNote(noteValues);
+    }
     closeModal();
   };
 
@@ -66,8 +89,20 @@ const SaveNote = () => {
           onChange={event => setTitle(event.target.value)}
         />
 
-        <div className="mb-1 mt-5">Colaboradores:</div>
+        <div className="mt-5">
+          <FormControlLabel
+            label="Oculta"
+            control={
+              <Checkbox
+                sx={{ paddingY: 0.5 }}
+                checked={hidden}
+                onChange={event => setHidden(event.target.checked)}
+              />
+            }
+          />
+        </div>
 
+        <div className="mb-1 mt-5">Colaboradores:</div>
         {allUsers.map(currUser => (
           <div key={currUser.id}>
             <FormControlLabel
@@ -87,6 +122,15 @@ const SaveNote = () => {
           <Button type="submit" variant="contained" endIcon={<NoteAddIcon />}>
             Guardar
           </Button>
+
+          {noteToUpdate && (
+            <div className="ml-5 sm:hidden">
+              <DeleteNoteBtn
+                note={noteToUpdate}
+                callbackFunction={closeModal}
+              />
+            </div>
+          )}
         </div>
       </form>
     </Dialog>

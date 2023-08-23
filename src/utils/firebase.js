@@ -182,6 +182,10 @@ export const createNewNote = note => {
   set(ref(database, `users/${ownerId}/notes/${key}`), key);
 };
 
+export const updateCompleteNoteInDb = note => {
+  set(ref(database, `notes/${note.id}`), note);
+};
+
 export const updateNoteContentInFirebase = (noteId, content) => {
   set(ref(database, `notesContent/${noteId}`), content);
 };
@@ -217,5 +221,9 @@ export const listenToNoteContentById = (noteId, onlyOnce = false) => {
 
 export const setNoteLockedValueInDb = (noteId, lockValue) => {
   set(ref(database, `notes/${noteId}/isLocked`), !lockValue);
+};
+
+export const setNoteHiddenValueInDb = (noteId, hiddenVal) => {
+  set(ref(database, `notes/${noteId}/hidden`), !hiddenVal);
 };
 //#endregion
