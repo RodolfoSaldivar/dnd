@@ -218,4 +218,8 @@ export const listenToNoteContentById = (noteId, onlyOnce = false) => {
 export const setNoteLockedValueInDb = (noteId, lockValue) => {
   set(ref(database, `notes/${noteId}/isLocked`), !lockValue);
 };
+
+export const setNoteHiddenValueInDb = (noteId, hiddenVal) => {
+  set(ref(database, `notes/${noteId}/hidden`), !hiddenVal);
+};
 //#endregion

@@ -7,12 +7,15 @@ import { useNotesStore } from "stores/notesStore";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLoggedUserStore } from "stores/loggedUser";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteWarning from "components/reusable/DeleteWarning";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
   deleteNoteFromFirebase,
+  setNoteHiddenValueInDb,
   setNoteLockedValueInDb,
   listenToNoteContentById,
   updateNoteContentInFirebase,
@@ -44,16 +47,33 @@ const NoteAccordion = ({ note }) => {
     setNoteLockedValueInDb(note.id, note.isLocked);
   };
 
+  const setHiddenValue = () => {
+    setNoteHiddenValueInDb(note.id, note.hidden);
+  };
+
   return (
-    <Accordion key={note.id} elevation={3}>
+    <Accordion
+      key={note.id}
+      elevation={3}
+      // expanded={sadasdasdadasasadasdasdadasa}
+    >
       <AccordionSummary
         id={`noteAccordion-${note.id}-header`}
         aria-controls={`noteAccordion-${note.id}-content`}
       >
         <div className="flex w-full items-center gap-3 text-lg font-medium">
           <div className="flex-1">{note.title}</div>
+
           {note.ownerId === loggedUserId && (
             <>
+              <IconButton
+                color="warning"
+                aria-label="lock"
+                onClick={setHiddenValue}
+              >
+                {note.hidden ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </IconButton>
+
               <IconButton
                 color="secondary"
                 aria-label="lock"
@@ -61,9 +81,11 @@ const NoteAccordion = ({ note }) => {
               >
                 {note.isLocked ? <LockIcon /> : <LockOpenIcon />}
               </IconButton>
+
               <IconButton aria-label="update" color="primary">
                 <EditIcon />
               </IconButton>
+
               <DeleteWarning deleteFunction={deleteNote}>
                 <IconButton aria-label="delete" color="error">
                   <DeleteIcon />

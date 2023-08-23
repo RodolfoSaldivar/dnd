@@ -11,6 +11,7 @@ import { convertSetToObject, getUsersWithoutLoggedOne } from "utils/helpers";
 
 const SaveNote = () => {
   const [title, setTitle] = useState("");
+  const [hidden, setHidden] = useState(false);
   const [triedToSave, setTriedToSave] = useState(false);
   const [collaborators, setCollaborators] = useState(new Set());
 
@@ -45,6 +46,7 @@ const SaveNote = () => {
     if (!title) return;
     createNewNote({
       title,
+      hidden,
       collaborators: convertSetToObject(collaborators),
     });
     closeModal();
@@ -66,8 +68,20 @@ const SaveNote = () => {
           onChange={event => setTitle(event.target.value)}
         />
 
-        <div className="mb-1 mt-5">Colaboradores:</div>
+        <div className="mt-5">
+          <FormControlLabel
+            label="Oculta"
+            control={
+              <Checkbox
+                sx={{ paddingY: 0.5 }}
+                checked={hidden}
+                onChange={event => setHidden(event.target.checked)}
+              />
+            }
+          />
+        </div>
 
+        <div className="mb-1 mt-5">Colaboradores:</div>
         {allUsers.map(currUser => (
           <div key={currUser.id}>
             <FormControlLabel
