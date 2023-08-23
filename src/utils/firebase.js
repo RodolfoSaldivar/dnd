@@ -182,6 +182,10 @@ export const createNewNote = note => {
   set(ref(database, `users/${ownerId}/notes/${key}`), key);
 };
 
+export const updateCompleteNoteInDb = note => {
+  set(ref(database, `notes/${note.id}`), note);
+};
+
 export const updateNoteContentInFirebase = (noteId, content) => {
   set(ref(database, `notesContent/${noteId}`), content);
 };

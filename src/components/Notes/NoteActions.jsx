@@ -5,6 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useLoggedUserStore } from "stores/loggedUser";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { useNotesStoreActions } from "stores/notesStore";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteWarning from "components/reusable/DeleteWarning";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -15,6 +16,8 @@ import {
 } from "utils/firebase";
 
 const NoteActions = ({ note }) => {
+  const { setNoteToUpdate, setSaveModalIsOpen } = useNotesStoreActions();
+
   const loggedUserId = useLoggedUserStore(state => state.userId);
   const canCollaborate = !!note.collaborators?.[loggedUserId];
 
@@ -28,6 +31,11 @@ const NoteActions = ({ note }) => {
 
   const setHiddenValue = () => {
     setNoteHiddenValueInDb(note.id, note.hidden);
+  };
+
+  const updateNote = () => {
+    setNoteToUpdate(note);
+    setSaveModalIsOpen(true);
   };
 
   return (
@@ -50,7 +58,7 @@ const NoteActions = ({ note }) => {
             {note.isLocked ? <LockIcon /> : <LockOpenIcon />}
           </IconButton>
 
-          <IconButton aria-label="update" color="primary">
+          <IconButton aria-label="update" color="primary" onClick={updateNote}>
             <EditIcon />
           </IconButton>
 
